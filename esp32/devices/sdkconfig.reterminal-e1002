@@ -59,3 +59,9 @@ CONFIG_HOMEHUB_SHT40_ENABLED=y
 # Allow firmware updates over Wi-Fi via device.ota. The partition table
 # already provides dual 2 MB OTA app slots with rollback.
 CONFIG_HOMEHUB_OTA_ENABLED=y
+
+# Battery voltage via ADC1 (GPIO1, divider enabled by GPIO21):
+# report battery_mv/battery_pct in device.health.
+CONFIG_HOMEHUB_BATTERY_ADC_ENABLED=y
+# Let the Wi-Fi radio sleep between beacons while staying associated.
+CONFIG_HOMEHUB_WIFI_MODEM_SLEEP=y

@@ -39,6 +39,7 @@
 
 extern "C" {
 #include "cJSON.h"
+#include "battery_adc.h"
 #include "led_status.h"
 #include "ota.h"
 #include "sht40.h"
@@ -1527,6 +1528,21 @@ static void send_device_health(
         charging = cJSON_CreateBool(power.charging);
     }
     usb_power = cJSON_CreateBool(power.usb);
+#endif
+#if CONFIG_HOMEHUB_BATTERY_ADC_ENABLED
+    int batt_mv = 0, batt_pct = 0;
+    if (battery_adc_read(&batt_mv, &batt_pct)) {
+        if (battery_pct) {
+            cJSON_Delete(battery_pct);
+            battery_pct = nullptr;
+        }
+        if (battery_mv) {
+            cJSON_Delete(battery_mv);
+            battery_mv = nullptr;
+        }
+        battery_pct = cJSON_CreateNumber(batt_pct);
+        battery_mv = cJSON_CreateNumber(batt_mv);
+    }
 #endif
     cJSON_AddItemToObject(metrics, "battery_pct",
                           battery_pct ? battery_pct : cJSON_CreateNull());
